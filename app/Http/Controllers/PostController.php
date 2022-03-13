@@ -8,9 +8,21 @@ use App\Models\Post;
 
 class PostController extends Controller
 {
-    public function store(PostRequest $request)
+    public function index()
     {
-        $post = Post::create($request->all());
+        $posts = Post::orderBy('created_at', 'desc')->paginate(10);
+
+        return response()->json($posts);
+    }
+
+    public function store(PostRequest $request)
+    {  
+        $post = Post::create([
+            'title' => $request->title,
+            'body' => $request->body,
+            'excerpt' => $request->excerpt,
+            'user_id' => auth()->id(),
+        ]);
         return response()->json([
             'post' => $post,
             'message' => 'Post created successfully.'
