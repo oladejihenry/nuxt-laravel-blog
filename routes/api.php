@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\{LoginController, RegisterController, LogoutController};
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\{UserController, PostController};
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +28,6 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('logout', LogoutController::class);
 
 Route::get('/user', UserController::class)->middleware(['auth:sanctum']);
+
+//Post Route
+Route::post('/post/store', [PostController::class, 'store'])->middleware(['auth:sanctum']);
