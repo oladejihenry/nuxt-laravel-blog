@@ -7,7 +7,12 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 
 class PostController extends Controller
-{
+{   
+    /**
+    *   Display all post in the order of created_at.
+    *   And also in desc order then paginate.
+    *   @return \Illuminate\Http\Response
+    */
     public function index()
     {
         $posts = Post::orderBy('created_at', 'desc')->paginate(10);
@@ -15,6 +20,12 @@ class PostController extends Controller
         return response()->json($posts);
     }
 
+    /**
+     * Stores new post.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(PostRequest $request)
     {  
         $post = Post::create([
