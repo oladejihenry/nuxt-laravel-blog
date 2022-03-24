@@ -39,4 +39,36 @@ class PostController extends Controller
             'message' => 'Post created successfully.'
         ], 200);
     }
+
+    /**
+     * Display/Edit the specified post.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $post = Post::find($id);
+        return response()->json($post);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function update(PostRequest $request, Post $post)
+    {
+        $post->update([
+            'title' => $request->title,
+            'body' => $request->body,
+            'excerpt' => $request->excerpt,
+        ]);
+        return response()->json([
+            'post' => $post,
+            'message' => 'Post updated successfully.'
+        ], 200);
+    }
 }

@@ -32,3 +32,5 @@ Route::get('/user', UserController::class)->middleware(['auth:sanctum']);
 //Post Route
 Route::get('/posts', [PostController::class, 'index'])->middleware(['auth:sanctum']);
 Route::post('/post/store', [PostController::class, 'store'])->middleware(['auth:sanctum']);
+Route::get('/post/{id}', [PostController::class, 'edit'])->middleware(['auth:sanctum']);
+Route::put('/post/update/{post:id}', [PostController::class, 'update'])->middleware(['auth:sanctum']);
