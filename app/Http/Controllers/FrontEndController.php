@@ -20,7 +20,7 @@ class FrontEndController extends Controller
             'body' => $post->body,
             'excerpt' => $post->excerpt,
             'slug' => $post->slug,
-            'category' => $post->categories->pluck('name'),
+            'category' => $post->categories->pluck('name')->implode(', '),
             'created_at' => $post->created_at->format('d F Y'),
             'username' => $post->user->username,
         ]);

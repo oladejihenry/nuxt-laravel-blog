@@ -41,7 +41,9 @@ class PostController extends Controller
             'excerpt' => $request->excerpt,
             'user_id' => auth()->id(),
         ]);
-        $post->categories()->sync($request->catSelected);
+
+        $post->categories()->attach($request->catSelected);
+        
         return response()->json([
             'post' => $post,
             'message' => 'Post created successfully.'
@@ -82,7 +84,7 @@ class PostController extends Controller
         ]);
 
         $post->categories()->sync($request->categories);
-        
+        $post->categories()->sync($request->mainCategories);
 
         return response()->json([
             'post' => $post,

@@ -7,6 +7,7 @@ use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
@@ -22,9 +23,9 @@ class Category extends Model
     /**
      *  Relation with Post
      */
-    public function posts(): BelongsTo
+    public function posts(): BelongsToMany
     {
-        return $this->belongsTo(Post::class, 'categories_posts');
+        return $this->belongsToMany(Post::class, 'categories_posts');
     }
 
 
