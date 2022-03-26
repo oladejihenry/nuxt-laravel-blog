@@ -32,9 +32,13 @@ Route::get('/user', UserController::class)->middleware(['auth:sanctum']);
 //Post Route
 Route::get('/posts', [PostController::class, 'index'])->middleware(['auth:sanctum']);
 Route::post('/post/store', [PostController::class, 'store'])->middleware(['auth:sanctum']);
+Route::get('/post/bin', [PostController::class, 'trashed'])->middleware(['auth:sanctum']);
 Route::get('/post/{id}', [PostController::class, 'edit'])->middleware(['auth:sanctum']);
 Route::put('/post/update/{post:id}', [PostController::class, 'update'])->middleware(['auth:sanctum']);
 Route::delete('/post/delete/{post:id}', [PostController::class, 'destroy'])->middleware(['auth:sanctum']);
+Route::put('/post/restore/{post:id}', [PostController::class, 'restore'])->middleware(['auth:sanctum']);
+Route::delete('/post/forceDelete/{post:id}', [PostController::class, 'forceDelete'])->middleware(['auth:sanctum']);
+
 
 //Category Route
 Route::get('/categories', [CategoryController::class, 'index'])->middleware(['auth:sanctum']);

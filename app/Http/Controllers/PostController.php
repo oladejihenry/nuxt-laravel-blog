@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Category;
 
 class PostController extends Controller
 {   
@@ -56,11 +57,12 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
+        $mainCat = Category::all();
         $cat = $post->categories()->get();
-        
         return response()->json([
             'post' => $post, 
-            'categories' => $cat
+            'categories' => $cat,
+            'mainCategories' => $mainCat
         ]);
     }
 
@@ -79,7 +81,8 @@ class PostController extends Controller
             'excerpt' => $request->excerpt,
         ]);
 
-        $post->categories()->attach($request->categories);
+        $post->categories()->sync($request->categories);
+        
 
         return response()->json([
             'post' => $post,
@@ -96,6 +99,39 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
+        return response()->json([
+            'message' => 'Post deleted successfully.'
+        ], 200);
+    }
+    
+
+    public function trashed()
+    {
+        $posts = Post::onlyTrashed()->paginate(10)->through(fn($post) =>[
+            'id' => $post->id,
+            'title' => $post->title,
+            'body' => $post->body,
+            'excerpt' => $post->excerpt,
+            'deleted_at' => $post->deleted_at->format('Y/m/d H:i'),
+        ]);
+
+        return response()->json($posts);
+    }
+
+    public function restore($id)
+    {
+        $post = Post::onlyTrashed()->find($id);
+        $post->restore();
+        return response()->json([
+            'message' => 'Post restored successfully.'
+        ], 200);
+    }
+
+    public function forceDelete($id)
+    {
+        $post = Post::onlyTrashed()->find($id);
+        $post->categories()->detach();
+        $post->forceDelete();
         return response()->json([
             'message' => 'Post deleted successfully.'
         ], 200);

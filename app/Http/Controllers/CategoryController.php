@@ -13,6 +13,7 @@ class CategoryController extends Controller
         $categories = Category::orderBy('created_at', 'desc')->paginate(10)->through(fn($categories) =>[
             'id' => $categories->id,
             'name' => $categories->name,
+            'description' => $categories->description,
             'updated_at' => $categories->updated_at->format('Y/m/d H:i'),
         ]);
       
