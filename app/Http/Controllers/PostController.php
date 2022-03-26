@@ -107,7 +107,7 @@ class PostController extends Controller
 
     public function trashed()
     {
-        $posts = Post::onlyTrashed()->paginate(10)->through(fn($post) =>[
+        $posts = Post::onlyTrashed('created_at', 'desc')->paginate(10)->through(fn($post) =>[
             'id' => $post->id,
             'title' => $post->title,
             'body' => $post->body,

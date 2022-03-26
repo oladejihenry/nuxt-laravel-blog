@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\{LoginController, RegisterController, LogoutController};
-use App\Http\Controllers\{UserController, PostController, CategoryController};
+use App\Http\Controllers\{UserController, PostController, CategoryController, FrontEndController};
 
 /*
 |--------------------------------------------------------------------------
@@ -45,3 +45,6 @@ Route::get('/categories', [CategoryController::class, 'index'])->middleware(['au
 Route::post('/category/store', [CategoryController::class, 'store'])->middleware(['auth:sanctum']);
 Route::get('/category/{id}', [CategoryController::class, 'edit'])->middleware(['auth:sanctum']);
 Route::put('/category/update/{category:id}', [CategoryController::class, 'update'])->middleware(['auth:sanctum']);
+
+//Frontend Route
+Route::get('/frontpage', [FrontEndController::class, 'index']);
