@@ -40,6 +40,7 @@ class PostController extends Controller
             'excerpt' => $request->excerpt,
             'user_id' => auth()->id(),
         ]);
+        $post->categories()->sync($request->catSelected);
         return response()->json([
             'post' => $post,
             'message' => 'Post created successfully.'
@@ -55,7 +56,12 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
-        return response()->json($post);
+        $cat = $post->categories()->get();
+        
+        return response()->json([
+            'post' => $post, 
+            'categories' => $cat
+        ]);
     }
 
     /**
@@ -72,9 +78,26 @@ class PostController extends Controller
             'body' => $request->body,
             'excerpt' => $request->excerpt,
         ]);
+
+        $post->categories()->attach($request->categories);
+
         return response()->json([
             'post' => $post,
             'message' => 'Post updated successfully.'
+        ], 200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Post $post)
+    {
+        $post->delete();
+        return response()->json([
+            'message' => 'Post deleted successfully.'
         ], 200);
     }
 }
