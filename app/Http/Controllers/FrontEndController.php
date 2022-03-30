@@ -27,4 +27,26 @@ class FrontEndController extends Controller
 
         return response()->json($posts);
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function show($slug)
+    {
+        $post = Post::where('slug', $slug)->firstOrFail();
+
+        return response()->json([
+            'title' => $post->title,
+            'body' => $post->body,
+            'excerpt' => $post->excerpt,
+            'slug' => $post->slug,
+            'category' => $post->categories->pluck('name')->implode(', '),
+            'created_at' => $post->created_at->format('d F Y'),
+            'username' => $post->user->username,
+        ]);
+    }
 }
