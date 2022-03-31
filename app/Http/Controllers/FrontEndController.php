@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Category;
 
 class FrontEndController extends Controller
 {
@@ -25,7 +26,12 @@ class FrontEndController extends Controller
             'username' => $post->user->username,
         ]);
 
-        return response()->json($posts);
+        $cat = Category::all();
+
+        return response()->json([
+            'posts' => $posts,
+            'cat' => $cat,
+        ]);
     }
 
     /**
