@@ -106,7 +106,7 @@ class PostController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified posts.
      *
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
@@ -119,7 +119,12 @@ class PostController extends Controller
         ], 200);
     }
     
-
+    /**
+     * Display the deleted posts.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
     public function trashed()
     {
         $posts = Post::onlyTrashed('created_at', 'desc')->paginate(10)->through(fn($post) =>[
@@ -134,6 +139,12 @@ class PostController extends Controller
         return response()->json($posts);
     }
 
+    /**
+     * Restore the specified posts.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
     public function restore($id)
     {
         $post = Post::onlyTrashed()->find($id);
@@ -143,6 +154,12 @@ class PostController extends Controller
         ], 200);
     }
 
+    /**
+     * Remove the specified post permanently.
+     *
+     * @param  \App\Models\Post  $post
+     * @return \Illuminate\Http\Response
+     */
     public function forceDelete($id)
     {
         $post = Post::onlyTrashed()->find($id);
