@@ -6,6 +6,8 @@ use App\Http\Requests\PostRequest;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {   
@@ -21,6 +23,7 @@ class PostController extends Controller
             'title' => $post->title,
             'body' => $post->body,
             'excerpt' => $post->excerpt,
+            'category' => $post->categories->pluck('name')->implode(', '),
             'updated_at' => $post->updated_at->format('Y/m/d H:i'),
         ]);
 
@@ -35,11 +38,22 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {  
+        if($request->featured_image)
+        {
+            $exploded = explode(',', $request->featured_image);
+            $decoded = base64_decode($exploded[1]);
+            // $fileName = $request->title.'.'.'jpg';
+            $fileName = Str::slug("{$request->title}.jpg");
+            $request->merge(['featured_image' => $fileName]);
+            Storage::disk('public')->put($fileName, $decoded);
+        }
+
         $post = Post::create([
             'title' => $request->title,
             'body' => $request->body,
             'excerpt' => $request->excerpt,
             'user_id' => auth()->id(),
+            'featured_image' => $request->featured_image,
         ]);
 
         $post->categories()->attach($request->catSelected);
@@ -83,8 +97,8 @@ class PostController extends Controller
             'excerpt' => $request->excerpt,
         ]);
 
-        $post->categories()->sync($request->categories);
-        $post->categories()->sync($request->mainCategories);
+        // $post->categories()->sync($request->categories);
+        // $post->categories()->sync($request->mainCategories);
 
         return response()->json([
             'post' => $post,
@@ -114,6 +128,7 @@ class PostController extends Controller
             'title' => $post->title,
             'body' => $post->body,
             'excerpt' => $post->excerpt,
+            'category' => $post->categories->pluck('name')->implode(', '),
             'deleted_at' => $post->deleted_at->format('Y/m/d H:i'),
         ]);
 

@@ -49,3 +49,4 @@ Route::put('/category/update/{category:id}', [CategoryController::class, 'update
 //Frontend Route
 Route::get('/frontpage', [FrontEndController::class, 'index']);
 Route::get('/frontpage/{slug}', [FrontEndController::class, 'show']);
+Route::get('/frontpage/category/{category:slug}', [FrontEndController::class, 'category']);

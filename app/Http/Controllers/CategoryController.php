@@ -26,7 +26,7 @@ class CategoryController extends Controller
     {
         $category = Category::create([
             'name' => $request->name,
-            'decription' => $request->decription,
+            'description' => $request->description,
         ]);
         return response()->json([
             'category' => $category,

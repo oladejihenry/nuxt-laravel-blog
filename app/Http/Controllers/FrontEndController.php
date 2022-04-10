@@ -20,8 +20,10 @@ class FrontEndController extends Controller
             'title' => $post->title,
             'body' => $post->body,
             'excerpt' => $post->excerpt,
+            'featured_image' => $post->featured_image,
             'slug' => $post->slug,
             'category' => $post->categories->pluck('name')->implode(', '),
+            'category_slug' => $post->categories->pluck('slug')->implode(', '),
             'created_at' => $post->created_at->format('d F Y'),
             'username' => $post->user->username,
         ]);
@@ -50,9 +52,32 @@ class FrontEndController extends Controller
             'body' => $post->body,
             'excerpt' => $post->excerpt,
             'slug' => $post->slug,
+            'featured_image' => $post->featured_image,
+            'category' => $post->categories->pluck('name')->implode(', '),
+            'category_slug' => $post->categories->pluck('slug')->implode(', '),
+            'created_at' => $post->created_at->format('d F Y'),
+            'username' => $post->user->username,
+        ]);
+    }
+
+    public function category(Category $category)
+    {
+        $posts = $category->posts()->orderBy('created_at', 'desc')->paginate(10)->through(fn($post) =>[
+            'id' => $post->id,
+            'title' => $post->title,
+            'body' => $post->body,
+            'excerpt' => $post->excerpt,
+            'featured_image' => $post->featured_image,
+            'slug' => $post->slug,
             'category' => $post->categories->pluck('name')->implode(', '),
             'created_at' => $post->created_at->format('d F Y'),
             'username' => $post->user->username,
+        ]);
+
+        return response()->json([
+            'posts' => $posts,
+            'cat' => Category::all(),
+            'category' => $category
         ]);
     }
 }
