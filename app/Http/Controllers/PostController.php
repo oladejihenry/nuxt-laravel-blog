@@ -42,7 +42,6 @@ class PostController extends Controller
         {
             $exploded = explode(',', $request->featured_image);
             $decoded = base64_decode($exploded[1]);
-            // $fileName = $request->title.'.'.'jpg';
             $fileName = Str::slug("{$request->title}.jpg");
             $request->merge(['featured_image' => $fileName]);
             Storage::disk('public')->put($fileName, $decoded);
