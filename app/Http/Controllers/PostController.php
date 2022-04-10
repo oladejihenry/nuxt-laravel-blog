@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {   
@@ -42,10 +43,21 @@ class PostController extends Controller
         {
             $exploded = explode(',', $request->featured_image);
             $decoded = base64_decode($exploded[1]);
-            $fileName = Str::slug("{$request->title}.jpg");
+            $fileName = Str::slug("{$request->title}".'.'.'jpg');
+            // $img = Image::make($decoded)->resize(265, 200)->encode('jpg');
             $request->merge(['featured_image' => $fileName]);
             Storage::disk('public')->put($fileName, $decoded);
         }
+
+        // if($request->main_image)
+        // {
+        //     $exploded = explode(',', $request->main_image);
+        //     $decoded = base64_decode($exploded[1]);
+        //     $fileName = Str::slug("{$request->title}.'.'.'jpg'");
+        //     $img = Image::make($decoded)->resize(736, 530)->encode('jpg');
+        //     $request->merge(['main_image' => $fileName]);
+        //     Storage::disk('public')->put($fileName, (string) $img);
+        // }
 
         $post = Post::create([
             'title' => $request->title,
@@ -53,6 +65,7 @@ class PostController extends Controller
             'excerpt' => $request->excerpt,
             'user_id' => auth()->id(),
             'featured_image' => $request->featured_image,
+            // 'main_image' => $request->main_image,
         ]);
 
         $post->categories()->attach($request->catSelected);

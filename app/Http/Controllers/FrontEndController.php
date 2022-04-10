@@ -53,6 +53,7 @@ class FrontEndController extends Controller
             'excerpt' => $post->excerpt,
             'slug' => $post->slug,
             'featured_image' => $post->featured_image,
+            'main_image' => $post->main_image,
             'category' => $post->categories->pluck('name')->implode(', '),
             'category_slug' => $post->categories->pluck('slug')->implode(', '),
             'created_at' => $post->created_at->format('d F Y'),
