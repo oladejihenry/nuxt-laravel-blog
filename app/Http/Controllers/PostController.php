@@ -43,21 +43,23 @@ class PostController extends Controller
         {
             $exploded = explode(',', $request->featured_image);
             $decoded = base64_decode($exploded[1]);
-            $fileName = Str::slug("{$request->title}".'.'.'jpg');
+            $fileName = Str::slug("{$request->title}"). ".jpg";
+            $img = Image::make($decoded)->resize(265, 200)->encode('jpg');
+            // $fileName = Str::slug("{$request->title}".'.'.'jpg');
             // $img = Image::make($decoded)->resize(265, 200)->encode('jpg');
             $request->merge(['featured_image' => $fileName]);
-            Storage::disk('public')->put($fileName, $decoded);
+            Storage::disk('public')->put($fileName,(string) $img);
         }
 
-        // if($request->main_image)
-        // {
-        //     $exploded = explode(',', $request->main_image);
-        //     $decoded = base64_decode($exploded[1]);
-        //     $fileName = Str::slug("{$request->title}.'.'.'jpg'");
-        //     $img = Image::make($decoded)->resize(736, 530)->encode('jpg');
-        //     $request->merge(['main_image' => $fileName]);
-        //     Storage::disk('public')->put($fileName, (string) $img);
-        // }
+        if($request->main_image)
+        {
+            $exploded2 = explode(',', $request->main_image);
+            $decoded2 = base64_decode($exploded2[1]);
+            $fileName2 = Str::slug("{$request->title}"). ".jpg";
+            $img2 = Image::make($decoded2)->resize(736, 530)->encode('jpg');
+            $request->merge(['main_image' => $fileName2]);
+            Storage::disk('public')->put($fileName2, (string) $img2);
+        }
 
         $post = Post::create([
             'title' => $request->title,
@@ -65,7 +67,7 @@ class PostController extends Controller
             'excerpt' => $request->excerpt,
             'user_id' => auth()->id(),
             'featured_image' => $request->featured_image,
-            // 'main_image' => $request->main_image,
+            'main_image' => $request->main_image,
         ]);
 
         $post->categories()->attach($request->catSelected);

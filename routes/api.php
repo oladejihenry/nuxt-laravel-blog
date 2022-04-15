@@ -28,6 +28,10 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('logout', LogoutController::class);
 
 Route::get('/user', UserController::class)->middleware(['auth:sanctum']);
+Route::get('/userIndex', [UserController::class, 'index'])->middleware(['auth:sanctum']);
+Route::post('/user/store', [UserController::class, 'store'])->middleware(['auth:sanctum']);
+Route::get('/user/{id}', [UserController::class, 'edit'])->middleware(['auth:sanctum']);
+Route::put('/user/update/{user:id}', [UserController::class, 'update'])->middleware(['auth:sanctum']);
 
 //Post Route
 Route::get('/posts', [PostController::class, 'index'])->middleware(['auth:sanctum']);

@@ -26,6 +26,7 @@ class FrontEndController extends Controller
             'category_slug' => $post->categories->pluck('slug')->implode(', '),
             'created_at' => $post->created_at->format('d F Y'),
             'username' => $post->user->username,
+            'profile_image' => $post->user->profile_image,
         ]);
 
         $cat = Category::all();
@@ -58,6 +59,8 @@ class FrontEndController extends Controller
             'category_slug' => $post->categories->pluck('slug')->implode(', '),
             'created_at' => $post->created_at->format('d F Y'),
             'username' => $post->user->username,
+            'profile_image' => $post->user->profile_image,
+            'description' => $post->user->description,
         ]);
     }
 

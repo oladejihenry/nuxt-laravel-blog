@@ -22,6 +22,7 @@ class Post extends Model
         'featured_image',
         'user_id',
         'slug',
+        'main_image',
     ];
 
     public function user(): BelongsTo
