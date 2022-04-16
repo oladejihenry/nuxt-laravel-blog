@@ -73,9 +73,12 @@ class UserController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        if($request->file($request->profile_image) )
-        {   
+        $fileName =Str::slug("{$request->username}"). ".jpg";
 
+        
+        if($request->hasFile('profile_image') )
+        {   
+            
             $exploded = explode(',', $request->profile_image);
             $decoded = base64_decode($exploded[1]);
             $fileName = Str::slug("{$request->username}"). ".jpg";
@@ -85,9 +88,9 @@ class UserController extends Controller
             $request->merge(['profile_image' => $fileName]);
             Storage::disk('public')->put($fileName,(string) $img);
         }
-        else{
-            $fileName = $request->profile_image;
-        }
+        // else{
+        //     $fileName = $request->profile_image;
+        // }
         $user->update([
             'name' => $request->name,
             'username' => $request->username,

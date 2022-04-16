@@ -9,6 +9,8 @@ use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {   
@@ -19,11 +21,12 @@ class PostController extends Controller
     */
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'desc')->paginate(10)->through(fn($post) =>[
+        $posts = Post::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(10)->through(fn($post) =>[
             'id' => $post->id,
             'title' => $post->title,
             'body' => $post->body,
             'excerpt' => $post->excerpt,
+            'username' => $post->user->username,
             'category' => $post->categories->pluck('name')->implode(', '),
             'updated_at' => $post->updated_at->format('Y/m/d H:i'),
         ]);
@@ -87,6 +90,8 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
+        Gate::authorize('edit', $post);
+        // $this->authorize('edit', $post);
         $mainCat = Category::all();
         $cat = $post->categories()->get();
         return response()->json([
@@ -105,6 +110,8 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post)
     {
+        Gate::authorize('update', $post);
+
         $post->update([
             'title' => $request->title,
             'body' => $request->body,
