@@ -63,8 +63,8 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $auth = Auth::id();
-        $user = User::find($auth);
+        $user = Auth::user();
+        // $user = User::find($auth->id);
         
         $request->validate([
             'name' => 'required|string|max:255',
@@ -73,34 +73,27 @@ class UserController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $fileName =Str::slug("{$request->username}"). ".jpg";
 
-        
-        if($request->hasFile('profile_image') )
+        $currentPhoto = $user->profile_image;
+    
+        if($request->profile_image != $currentPhoto)
         {   
-            
-            $exploded = explode(',', $request->profile_image);
-            $decoded = base64_decode($exploded[1]);
-            $fileName = Str::slug("{$request->username}"). ".jpg";
-            $img = Image::make($decoded)->resize(360, 358)->encode('jpg');
-            // $fileName = Str::slug("{$request->title}".'.'.'jpg');
-            // $img = Image::make($decoded)->resize(265, 200)->encode('jpg');
-            $request->merge(['profile_image' => $fileName]);
-            Storage::disk('public')->put($fileName,(string) $img);
-        }
-        // else{
-        //     $fileName = $request->profile_image;
-        // }
-        $user->update([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'profile_image' => $fileName,
-            'description' => $request->description,
-        ]);
+ 
+            $name = time().'.' . explode('/', explode(':', substr($request->profile_image, 0, strpos($request->profile_image, ';')))[1])[1];
+            $img = Image::make($request->profile_image)->resize(360, 358)->encode('jpg');
+            Storage::disk('profile')->put($name,(string) $img);
+            $request->merge(['profile_image' => $name]);
 
-        // $user->update($request->all());
+            $userPhoto = public_path('storage/img/profile/').$currentPhoto;
+
+            if(file_exists($userPhoto)){
+
+                @unlink($userPhoto);
+                
+            }
+        }
+
+        $user->update($request->all());
 
         return response()->json([
             'user' => $user, 
