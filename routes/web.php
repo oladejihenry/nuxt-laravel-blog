@@ -17,6 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Route::get('/login', function () {
+//     return 'hi';
+// });
 
 // Route::get('/clear', function() {
 
