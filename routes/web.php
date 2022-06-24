@@ -20,9 +20,11 @@ Route::get('/', function () {
 
 
 
-// Route::get('/login', function () {
+// Route::post('/login', function () {
 //     return 'hi';
 // });
+
+// Route::post('/login', LoginController::class);
 
 // Route::get('/clear', function() {
 
