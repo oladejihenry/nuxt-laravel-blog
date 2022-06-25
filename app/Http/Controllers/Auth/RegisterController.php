@@ -28,7 +28,7 @@ class RegisterController extends Controller
                 'name' => $request->name,
                 'username' => $request->username,
                 'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'password' => bcrypt($request->password),
             ]));
 
             event(new Registered($user));
