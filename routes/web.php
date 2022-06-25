@@ -19,9 +19,9 @@ Route::get('/', function () {
 });
 
 //Auth
-Route::post('/login', LoginController::class);
-Route::post('/register', [RegisterController::class, 'register']);
-Route::post('/logout', LogoutController::class);
+// Route::post('/login', LoginController::class);
+// Route::post('/register', [RegisterController::class, 'register']);
+// Route::post('/logout', LogoutController::class);
 
 // Route::post('/login', function () {
 //     return 'hi';

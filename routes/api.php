@@ -23,9 +23,9 @@ use App\Http\Controllers\{UserController, PostController, CategoryController, Fr
 
 
 // //Auth
-// Route::post('/login', LoginController::class);
-// Route::post('/register', [RegisterController::class, 'register']);
-// Route::post('/logout', LogoutController::class);
+Route::post('/login', LoginController::class);
+Route::post('/register', [RegisterController::class, 'register']);
+Route::post('/logout', LogoutController::class);
 
 Route::get('/user', UserController::class)->middleware(['auth:sanctum']);
 Route::get('/userIndex', [UserController::class, 'index'])->middleware(['auth:sanctum']);
