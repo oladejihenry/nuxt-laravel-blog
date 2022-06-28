@@ -53,8 +53,8 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
-    public function password(): Attribute
-    {
-        return new Attribute(set: fn ($value) => bcrypt($value));
-    }
+    // public function password(): Attribute
+    // {
+    //     return new Attribute(set: fn ($value) => bcrypt($value));
+    // }
 }
