@@ -31,6 +31,7 @@ class UserController extends Controller
             'name' => $user->name,
             'email' => $user->email,
             'username' => $user->username,
+            'profile_image' => $user->profile_image,
             'created_at' => $user->created_at->format('Y/m/d H:i'),
             'updated_at' => $user->updated_at->format('Y/m/d h:i A'),
         ]);
@@ -92,6 +93,10 @@ class UserController extends Controller
                 
             }
         }
+        
+        $request->merge([
+            'password' => Hash::make($request->get('password')),
+        ]);
 
         $user->update($request->all());
 
